@@ -1,2 +1,12 @@
 clear
-echo 请输入虚无mh打开工具
+folders=("pak" "dat")
+mkdir -p dat
+for folder in "${folders[@]}"; do
+    if [ -d "$folder" ]; then
+        echo "请输入虚无mh进入工具" 
+     else
+        mkdir "$folder"
+        echo "请输入虚无mh进入工具"
+        exit 0
+    fi
+done
