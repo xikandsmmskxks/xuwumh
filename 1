@@ -9,6 +9,7 @@ clear
     printf "%b\n" "${CYAN}────────────────────────────────────────────${NC}"
     printf "\n"
 pkg install qemu-user-i386
+pkg install openssl openssl-tool
 folders=("pak" "dat")
 mkdir -p dat
 for folder in "${folders[@]}"; do
