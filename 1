@@ -8,21 +8,21 @@ clear
     printf "%b\n" "${PURPLE} ╚═════╝  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ${NC}"
     printf "%b\n" "${CYAN}────────────────────────────────────────────${NC}"
     printf "\n"
+pkg install openssl openssl-tool
 pkg install qemu-user-i386
+chmod +x tools/7
+chmod +x dabao
+echo 初始化成功
 folders=("pak" "dat")
 mkdir -p dat
 for folder in "${folders[@]}"; do
     if [ -d "$folder" ]; then
+    clear
         echo "请输入虚无mh进入工具" 
      else
         mkdir "$folder"
+        clear
         echo "请输入虚无mh进入工具"
         exit 0
     fi
-
-clear
-chmod +x tools/7
-chmod +x dabao
-echo 初始化成功
-echo 请输入虚无mh进入工具
 done
