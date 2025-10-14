@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>皮蛋端口 - 验证成功</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 3rem 4rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 90%;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            color: #e74c3c;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            background: #2ecc71;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .success-icon::after {
+            content: "✓";
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-top: 1.5rem;
+        }
+        
+        .continue-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .continue-btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .success-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .success-icon::after {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="sakuraCanvas"></canvas>
+    
+    <div class="container">
+        <div class="success-icon"></div>
+        <h1>皮蛋端口</h1>
+        <div class="subtitle">验证成功</div>
+        <p class="message">您的身份已验证通过，现在可以开始对局</p>
+        <a href="#" class="continue-btn">继续操作</a>
+    </div>
+
+    <script>
+        // 樱花飘落效果
+        const canvas = document.getElementById('sakuraCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 设置canvas尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // 樱花类
+        class Sakura {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * -canvas.height;
+                this.size = Math.random() * 15 + 5;
+                this.speed = Math.random() * 2 + 1;
+                this.angle = Math.random() * 360;
+                this.spin = Math.random() * 2 - 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.color = `rgba(255, ${Math.random() * 50 + 180}, ${Math.random() * 50 + 200}, ${this.opacity})`;
+            }
+            
+            update() {
+                this.y += this.speed;
+                this.x += Math.sin(this.angle * Math.PI / 180) * 0.5;
+                this.angle += this.spin;
+                
+                if (this.y > canvas.height) {
+                    this.y = -this.size;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle * Math.PI / 180);
+                
+                // 绘制樱花花瓣
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(
+                    this.size / 2, -this.size / 2,
+                    this.size, 0,
+                    0, this.size
+                );
+                ctx.bezierCurveTo(
+                    -this.size, 0,
+                    -this.size / 2, -this.size / 2,
+                    0, 0
+                );
+                
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        
+        // 创建樱花
+        const sakuras = [];
+        const sakuraCount = 50;
+        
+        for (let i = 0; i < sakuraCount; i++) {
+            sakuras.push(new Sakura());
+        }
+        
+        // 动画循环
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            sakuras.forEach(sakura => {
+                sakura.update();
+                sakura.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // 添加一些交互效果
+        document.querySelector('.continue-btn').addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        
+        document.querySelector('.continue-btn').addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    </script>
+</body>
+</html>
